@@ -1,6 +1,10 @@
-FROM golang
-RUN mkdir /app
-ADD . /app
-WORKDIR /app
-RUN go build -o main .
-CMD ["/app/main"]
+FROM golang:alpine AS builder
+
+WORKDIR /go/src/app
+
+COPY go.mod .
+RUN go mod download
+
+EXPOSE 8080
+
+CMD ["go", "run", "server.go"]
